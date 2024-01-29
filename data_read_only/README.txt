@@ -1,0 +1,1 @@
+Data access is restricted to protect the privacy of PFAS Exposure Assessment participants. An example dataset containing 'mock' data is provided in the file 'ATSDR_EA_dust_example_dataset.csv'.
