@@ -64,79 +64,6 @@ for (i in 1:length(PFAS)) {
 }
 detect_freq_df
 
-### Analyze correlation between participant serum levels and household dust levels
-### using linear mixed effects modeling
-
-# PFOA
-
-mixed_model <- lmer(log_PFOA_serum ~ log_PFOA_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Non-significant (p=0.08)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model)  # marginal r2 = 0.48 
-
-# PFOS
-
-mixed_model <- lmer(log_PFOS_serum ~ log_PFOS_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.01)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.53
-
-# PFHxS
-
-mixed_model <- lmer(log_PFHxS_serum ~ log_PFHxS_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.03)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.48
-
-# PFNA
-
-mixed_model <- lmer(log_PFNA_serum ~ log_PFNA_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.001]) 
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.36
-
-# PFDA
-
-mixed_model <- lmer(log_PFDA_serum ~ log_PFDA_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.03)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.18
-
-# PFUnA
-
-mixed_model <- lmer(log_PFUnA_serum ~ log_PFUnA_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.04)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.19
-
-# MeFOSAA
-
-mixed_model <- lmer(log_MeFOSAA_serum ~ log_MeFOSAA_dust + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p<0.001)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.24
-
-# Sum of PFAS
-mixed_model <- lmer(log_sum_PFAS_serum ~ log_sum_PFAS_dust  + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.01)
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.51
-
 
 ### plots of raw log serum vs log dust
 plot(log_PFOA_serum ~ log_PFOA_dust, data=df, pch=16)
@@ -149,7 +76,7 @@ plot(log_PFUnA_serum ~ log_PFUnA_dust, data=df, pch=16)
 
 
 ### Are PFAS serum levels correlated with the age of participants?
-# note: random effect no longer needed as age and serum levels are both measured
+# note: random effect not needed as age and serum levels are both measured
 #       at the individual level
 
 # analyze age ~ serum relationship with Pearson's test
@@ -185,8 +112,9 @@ cor.test(dfhh_age$log_sum_PFAS_dust, dfhh_age$age, method = 'pearson') # sig (p<
 
 
 
-### Repeat analysis of participant serum levels and household dust levels
-### using linear mixed effects modeling - but include AGE covariate
+### Analyze correlation between participant serum levels and household dust levels
+### using linear mixed effects modeling - accounting for participant age
+
 
 # PFOA
 
@@ -308,82 +236,7 @@ corr.test(df$age, df$log_MeFOSAA_dust_load) # sig
 
 
 ### Analyze correlation between participant serum levels and household dust 
-### PFAS load using linear mixed effects modeling (no age covariate)
-
-# PFOA
-
-mixed_model <- lmer(log_PFOA_serum ~ log_PFOA_dust_load + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # no significant dust load effect
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model)  # marginal r2 = 0.47
-
-# PFOS
-
-mixed_model <- lmer(log_PFOS_serum ~ log_PFOS_dust_load + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq")  # no significant dust load effect
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.52
-
-# PFHxS
-
-mixed_model <- lmer(log_PFHxS_serum ~ log_PFHxS_dust_load + site + (1|hid), data=df)
-summary(mixed_model) 
-drop1(mixed_model, test="Chisq")  # no significant dust load effect
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.47
-
-# PFNA
-
-mixed_model <- lmer(log_PFNA_serum ~ log_PFNA_dust_load + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p=0.013) 
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.34
-
-# PFDA
-
-mixed_model <- lmer(log_PFDA_serum ~ log_PFDA_dust_load + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq")  # no significant dust load effect
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.15
-
-# PFUnA
-
-mixed_model <- lmer(log_PFUnA_serum ~ log_PFUnA_dust_load + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq")  # no significant dust load effect
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.17
-
-# MeFOSAA
-
-mixed_model <- lmer(log_MeFOSAA_serum ~ log_MeFOSAA_dust_load + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # Significant dust effect (p<0.001)
-hist(resid(mixed_model)) # residuals roughly normal
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.25
-
-
-# Sum of PFAS
-mixed_model <- lmer(log_sum_PFAS_serum ~ log_sum_PFAS_dust_load  + site + (1|hid), data=df)
-summary(mixed_model)
-drop1(mixed_model, test="Chisq") # no significant dust load effect
-plot(mixed_model)
-r.squaredGLMM(mixed_model) # marginal r2 = 0.49
-
-
-### Analyze correlation between participant serum levels and household dust 
-### PFAS load using linear mixed effects modeling (no age covariate)
+### PFAS load using linear mixed effects modeling - accounting for participant age
 
 # remove the 1 row with missing age
 dfa <- subset(df, !is.na(age))
@@ -463,7 +316,7 @@ r.squaredGLMM(mixed_model) # marginal r2 = 0.55
 ##### Plots for manuscript
 
 
-# PFNA dust vs serum - figure 3
+# PFNA dust vs serum - figure A1
 ggplot(df, aes(y = log_PFNA_serum, x = log_PFNA_dust)) + geom_point(size = 2, color='grey40',alpha=0.5) +
   theme_classic() + ggtitle("") +
   geom_abline(intercept=-1.33, slope=0.19, lwd=1, lty='dashed', color='black') + 
@@ -473,21 +326,21 @@ ggplot(df, aes(y = log_PFNA_serum, x = log_PFNA_dust)) + geom_point(size = 2, co
         plot.title = element_text(size = 18, hjust = 0.5)) +
   annotate("text", x = 4.5, y = 1, label = "p == 0.002", parse = T, hjust = 0, size = 5) + 
   annotate("text", x = 4.5, y = 0.7, label = "R^2 == 0.38", parse = T, hjust = 0, size = 5)
-ggsave("output/figures/Figure_3.jpeg", width = 6, height = 5, units = "in", dpi = 300)
+ggsave("output/figures/Figure_A1.jpeg", width = 6, height = 5, units = "in", dpi = 300)
 
-##### Generate supplemental table 1
+##### Generate Appendix table A1
 PFAS_order = c('PFHxS', 'PFOA', 'PFOS', 'PFNA', 'PFDA', 'PFUnA', 'MeFOSAA', 'sum')
 
-table_s1<- list()
+table_a1 <- list()
 for(i in 1:length(PFAS_order)){
   model_obj <- eval(parse(text=paste(PFAS_order[i],"_age_mixed_model",sep="")))
   estimates <- sprintf("%.2f", round(coef(summary((model_obj)))[,'Estimate'],2))
   ses <- sprintf("%.2f", round(coef(summary((model_obj)))[,'Std. Error'],2))
-  table_s1[[i]] <- paste(estimates,ses, sep=" ± ")
+  table_a1[[i]] <- paste(estimates,ses, sep=" ± ")
 }
-names(table_s1) <- PFAS_order
-table_s1 <- do.call("cbind",table_s1)
-rownames(table_s1) <- c("Intercept", "ln(dust ug/g)", "ln(age)","SiteWV", "SiteDE",
+names(table_a1) <- PFAS_order
+table_a1 <- do.call("cbind",table_a1)
+rownames(table_a1) <- c("Intercept", "ln(dust ug/g)", "ln(age)","SiteWV", "SiteDE",
                     "SiteWA", "SiteTX","SiteNY", "SiteAK", "SiteCO")
-write.csv(table_s1, "output/table_s1.csv")
+write.csv(table_a1, "output/table_a1.csv")
 

@@ -131,7 +131,6 @@ Anova(mod)  # ANOVA sig +;
 hist(resid(mod))
 plot(log_PFOS_dust ~ years_at_home, data=dfhh_years_at_home)
 
-
 # PFOA
 mod = lm(log_PFOA_dust ~ years_at_home + site, data=dfhh_years_at_home)
 Anova(mod)  # ANOVA sig +
@@ -185,9 +184,9 @@ Anova(lm(log_dust_load ~ years_at_home + site, data=dfhh_years_at_home)) # no ef
 
 
 ### NOTES
-# years lived at current home is sig. positively correlated with
+# years lived at current home is sig. positively associated with
 # dust levels for 6 of 7 PFAS (All but PFUnA)
-# also correlated for sum(PFAS) 
+# also associated for sum(PFAS) 
 # May correlate with age of home or age of elements inside the home
 
 
@@ -220,8 +219,8 @@ Anova(lm(log_dust_load_max ~ cleaning_bin_max + site, data=dfhh_clean)) # no eff
 
 
 ### NOTES
-# 3 of 7 PFAS (PFOS, PFHxS, MeFOSAA) are correlated with household cleaning frequency
-# Also sum(PFAS) is correlated with cleaning frequency
+# 3 of 7 PFAS (PFOS, PFHxS, MeFOSAA) are associated with household cleaning frequency
+# Also sum(PFAS) is associated with cleaning frequency
 
 
 # cleaning freq vs age
@@ -270,8 +269,8 @@ summary(aov(age_mean ~ stain_bin_max, data=dfhh_stain)) # no rel. between age an
 (exp(0.57252+0.99208 ) - exp(0.57252)) / exp(0.57252) * 100 # PFUnA
 
 ### NOTES
-# 3 of 7 PFAS (PFNA, PFDA, PFUnA) are correlated with stain resistant product use)
-# sum of PFAS not correlated
+# 3 of 7 PFAS (PFNA, PFDA, PFUnA) are associated with stain resistant product use)
+# sum of PFAS not associated
 
 
 ###########
@@ -394,7 +393,7 @@ Anova(lm(log_sum_PFAS_dust_mean ~ work_bin_max + site, data=dfhh_work)) # not si
 # No significant trends between PFAS levels in dust and someone in HH
 #   working in industries with possible exposure.
 
-# correlated with age? no
+# associated with age? no
 summary(aov(age_mean ~ work_bin_max, data=dfhh_work))
 
 
@@ -447,9 +446,6 @@ df_clean_long <- melt(dfhh_clean, id.vars=c('site', 'cleaning_bin_max'), measure
 chemical_labels <- c('PFOA', 'bold(PFOS)', 'bold(PFHxS)', 'PFNA', 'PFDA', 'PFUnA', 'bold(MeFOSAA)', 'bold("Sum PFAS")')
 df_clean_long$chemical_labeled <- factor(df_clean_long$chemical, labels=chemical_labels)
 df_clean_long$cleaning_level = factor(df_clean_long$cleaning_bin_max, labels=c('Low/Med', 'High'))
-#sig_chemicals <- c('log_PFOS_dust_mean', 'log_PFHxS_dust_mean',
-#                   'log_MeFOSAA_dust_mean', 'log_sum_PFAS_dust_mean')
-
 
 plot_cleaning <- ggplot(df_clean_long[complete.cases(df_clean_long$cleaning_level),], 
             aes(cleaning_level, dust_ng.g, fill=cleaning_level)) + facet_wrap(~chemical_labeled,nrow=1, labeller = label_parsed) +
@@ -474,8 +470,6 @@ df_stain_long <- melt(dfhh_stain, id.vars=c('site', 'stain_bin_max'), measure.va
                       variable.name='chemical', value.name='dust_ng.g')
 chemical_labels <- c('PFOA', 'PFOS', 'PFHxS', 'bold(PFNA)', 'bold(PFDA)', 'bold(PFUnA)', 'MeFOSAA', '"Sum PFAS"')
 df_stain_long$chemical_labeled <- factor(df_stain_long$chemical, labels=chemical_labels)
-#sig_chemicals <- c('log_PFNA_dust_mean', 'log_PFDA_dust_mean',
-#                   'log_PFUnA_dust_mean')
 label_shade_df <- data.frame(
   var = log_dust_cols,
   var_color = c("white", "white", "white", "grey50", "grey50", "grey50", "white", "white")
@@ -499,4 +493,4 @@ plot_stain <- ggplot(df_stain_long[complete.cases(df_stain_long$stain_bin_max),]
 
 output = plot_grid(plot_cleaning, plot_stain,align='h',nrow=2, labels=c("a)", "b)"),scale=0.93)# + 
   #draw_label("Concentration in dust (log ng/g)", x=  0.03, y=0.5, vjust= 1.5, angle=90)
-ggsave("output/figures/Figure_5.jpeg", output, width = 12, height = 7, units = "in", dpi = 600)
+ggsave("output/figures/Figure_A2.jpeg", output, width = 12, height = 7, units = "in", dpi = 600)
